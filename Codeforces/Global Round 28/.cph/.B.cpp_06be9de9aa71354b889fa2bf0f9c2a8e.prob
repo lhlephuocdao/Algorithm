@@ -1,0 +1,1 @@
+{"name":"Local: B","url":"d:\\C++\\Codeforces\\Global Round 28\\B.cpp","tests":[{"id":1734619897449,"input":"3\n4 2\n6 1\n8 3\n","output":"3 1 2 4\n5 2 1 6 4 3\n4 6 2 8 3 1 5 7\n"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\C++\\Codeforces\\Global Round 28\\B.cpp","group":"local","local":true}

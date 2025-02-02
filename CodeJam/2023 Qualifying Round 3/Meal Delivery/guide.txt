@@ -1,0 +1,253 @@
+1. intro
+The famous issue tsp has a detailed explanation in the link. [ link ]
+
+To sum up the problem,
+
+When n cities are given and the distance between each city is given,
+
+The problem is to find a path that travels through all cities with the shortest distance.
+
+This problem is a representative NP-Hard problem, and its time complexity is O(2^n).
+
+
+
+2. Solve
+2.1. Calculate values ​​for all cases
+Of course you can't do this, but the number of all routes is n for the number of input cities n! am.
+
+If there are 10 inputs, that is 3,628,800. What if 20? 2, 432, 902, 008, 176, 640, 000  ... I don't want to ask for it. (For factorial see:  http://en.wikipedia.org/wiki/Factorial )
+
+Let's just move on knowing that this can't be solved.
+
+
+
+2.2. Solving with dynamic programming
+Basically, this method also finds the sum of distances for all paths.
+
+However, for the difference, a method of reducing the number of calculations is used by removing all duplication occurring in the previous method.
+
+For example,
+
+1 > 2 > 3 > 4 > 5
+
+1 > 2 > 3 > 5 > 4
+
+When calculating the value when moving along such a path, 1>2>3 are common, so there is no need to double-calculate them.
+
+If the problem is solved in this way, if the number of input cities is 10, the number of paths to be calculated is 2048 (2^11), significantly reduced than before.
+
+If the number of cities is 20, it only needs to be calculated about 2 million times. lol
+
+
+
+problem solving
+
+This problem can be solved in the following way.
+
+Given cities {1, 2, 3, 4, 5}, let's define the minimum path as min {1, 2, 3, 4, 5}.
+
+Then, the minimum value is
+
+min {1, 2, 3, 4, 5} = min (
+
+1 > min {2, 3, 4, 5}, // Minimum value starting at 1 and traversing {2, 3, 4, 5}
+
+2 > min {1, 3, 4, 5}, // Minimum value to traverse the rest starting from 2 as well
+
+3 > min {1, 2, 4, 5},
+
+4 > min {1, 2, 3, 5},
+
+5 > min {1, 2, 3, 4}
+
+)
+
+
+
+1 > min {2, 3, 4, 5} has the following meaning.
+
+1 > min {2, 3, 4, 5} = min (
+
+distance(1, 2) + min (2 > {3, 4, 5}), // "distance from 1 to 2" + min value to traverse the remaining cities starting from 2
+
+distance(1, 3) + min (2 > {2, 4, 5}),
+
+distance(1, 4) + min (2 > {2, 3, 5}),
+
+distance(1, 5) + min (2 > {2, 3, 4})
+
+)
+
+
+
+Repeated expansion in this way eventually leads to the simplest form, such as 4 > {5}. This value is distance(4 ,5).
+
+
+
+data structure
+
+To convert the above into code, you need to be able to simply express the set of cities you want to tour.
+
+When expressing a set, the simplest method is to use bit flags.
+
+For example, the binary number 11111 represents the set {1, 2, 3, 4, 5}.
+
+
+
+Then, the minimum value starting from 1 and traversing {2, 3, 4, 5} can be expressed in code as follows.
+
+tsp (1, 0x1E) // The hexadecimal number "1E" is equivalent to the binary number "11110."
+Therefore, the prototype of the tsp function can be written as:
+
+int tsp (int from, int toFlag);
+
+
+The function tsp is called recursively.
+
+int tsp (int from, int toFlag) {
+    int m = INT_MAX;
+    for (int i = 0; i < _n /* the nuber of cities */; i++) {
+        if (!(toFlag & (1 << i))) continue;
+
+        int v = _distance[from][i] + tsp(i, (toFlag & ~(1<<i)));
+        m = min(m, v);
+    }
+    return m;
+}
+If you are unfamiliar with bit flag operations, see:  http://forum.codecall.net/topic/56591-bit-fields-flags-tutorial-with-example/
+
+Line 4 filters out indexes not included in toFlag.
+
+So the actual calculation part is 6 lines.
+
+In line 7, the minimum value among the values ​​calculated in line 6 is stored.
+
+
+
+In this code, there is no termination condition and no memoization code. The completed code is as follows.
+
+int tsp (int from, int toFlag) {
+    int &memo = _memory[from][toFlag]; // _memory[][] must be initialized to 0.
+    if (memo != 0) {
+        return memo;
+    }
+    if (bitCount(toFlag) == 1) {
+        int to = getIndex(toFlag);
+        return _distance[from][to];
+    }
+
+    memo = INT_MAX;
+    for (int i = 0; i < _n /* the nuber of cities */; i++) {
+        if (!(toFlag & (1 << i))) continue;
+
+        int v = _distance[from][i] + tsp(i, (toFlag & ~(1<<i)));
+        memo = min(memo, v);
+    }
+    return memo;
+}
+The termination condition is when only one city remains in toFlag. 
+
+In this case, just return distance(from, to). I hope you implement and calculate to yourself... 
+
+If you use the gcc compiler,  you can use __builtin_popcount()  without having to implement bitCount() .
+
+Again,  you can use __builtin_ctz(  ) instead of getIndex().
+
+See the following link for more information on this:  http://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html
+
+
+
+full code
+
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+
+int _n; // num
+const int MAX_SIZE = 15; //  Enough (can't be more than 32) depending on input size
+int _distance [MAX_SIZE][MAX_SIZE]; // _distance
+int _memory [MAX_SIZE][1<<MAX_SIZE]; // for memoization
+
+
+ 
+void getInput() {
+    cin >> _n;
+    for (int i = 0; i < _n; i++) {
+        for (int j = 0; j < _n; j++) {
+            cin >> _distance[i][j];
+        }
+    }
+    memset(_memory, 0, sizeof(int) * MAX_SIZE * (1<<MAX_SIZE));
+}
+
+ 
+int tsp (int from, int toFlag) {
+    int &memo = _memory[from][toFlag]; // _memory[][] must be initialized to 0.
+    if (memo != 0) {
+        return memo;
+    }
+    if (__builtin_popcount(toFlag) == 1) {
+        int to = __builtin_ctz(toFlag);
+        return _distance[from][to];
+    }
+
+    memo = INT_MAX; // You can just use a large enough number
+    for (int i = 0; i < _n /* the nuber of cities */; i++) {
+        if (!(toFlag & (1 << i))) continue;
+
+        int v = _distance[from][i] + tsp(i, (toFlag & ~(1<<i)));
+        memo = min(memo, v);
+    }
+    return memo;
+}
+ 
+int main() {
+    getInput();
+    int m = INT_MAX;
+    int allFlag = (1<<_n) - 1;
+    for (int i = 0; i < _n; i++) {
+        int v = tsp(i, allFlag & ~(1<<i));
+        m = min(m, v);
+    }
+    cout << m << endl;
+    return 0;
+}
+
+
+
+# input 
+15
+0 29 82 46 68 52 72 42 51 55 29 74 23 72 46
+29  0 55 46 42 43 43 23 23 31 41 51 11 52 21
+82 55  0 68 46 55 23 43 41 29 79 21 64 31 51
+46 46 68  0 82 15 72 31 62 42 21 51 51 43 64
+68 42 46 82  0 74 23 52 21 46 82 58 46 65 23
+52 43 55 15 74  0 61 23 55 31 33 37 51 29 59
+72 43 23 72 23 61  0 42 23 31 77 37 51 46 33
+42 23 43 31 52 23 42  0 33 15 37 33 33 31 37
+51 23 41 62 21 55 23 33  0 29 62 46 29 51 11
+55 31 29 42 46 31 31 15 29  0 51 21 41 23 37
+29 41 79 21 82 33 77 37 62 51  0 65 42 59 61
+74 51 21 51 58 37 37 33 46 21 65  0 61 11 55
+23 11 64 51 46 51 51 33 29 41 42 61  0 62 23
+72 52 31 43 65 29 46 31 51 23 59 11 62  0 59
+46 21 51 64 23 59 33 37 11 37 61 55 23 59  0
+
+
+# output
+262
+
+
+3. Minor improvements
+3.1 Eliminate recursion
+
+To get the final value, we eventually have to calculate all parts of _memory[][].
+
+With recursion, the function to get the last value is called first, but the actual order of calculation is the value moving from one city to another.
+
+Therefore, you can calculate from the beginning (?) of _memory[][] from the beginning.
+
+
+
+Bit operations faster than 3.2

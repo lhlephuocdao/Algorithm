@@ -1,0 +1,1 @@
+{"name":"Local: A","url":"d:\\C++\\Codeforces\\Round 987 Div2\\A.cpp","tests":[{"id":1731674687310,"input":"3\n5\n5 4 3 2 1\n3\n2 2 1\n1\n1\n","output":"4\n1\n0\n"},{"id":1731674769854,"input":"1\n5\n4 4 4 3 3","output":"2"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\C++\\Codeforces\\Round 987 Div2\\A.cpp","group":"local","local":true}

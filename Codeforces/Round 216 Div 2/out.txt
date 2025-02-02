@@ -1,0 +1,22 @@
+dfs parent : 0 u : 1 prev: 0
+neighbor: 2
+mark false 0 true 2
+dfs parent : 1 u : 2 prev: 2
+neighbor: 1
+neighbor: 3
+mark false 0 true 3
+dfs parent : 1 u : 3 prev: 3
+neighbor: 1
+neighbor: 4
+mark false 0 true 4
+dfs parent : 1 u : 4 prev: 4
+neighbor: 1
+neighbor: 5
+mark false 0 true 5
+dfs parent : 1 u : 5 prev: 5
+neighbor: 1
+4
+2
+3
+4
+5

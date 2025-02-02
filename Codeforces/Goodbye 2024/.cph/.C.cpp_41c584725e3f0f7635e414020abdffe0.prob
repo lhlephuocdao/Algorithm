@@ -1,0 +1,1 @@
+{"name":"Local: C","url":"d:\\C++\\Codeforces\\Goodbye 2024\\C.cpp","tests":[{"id":1735401733645,"input":"6\n7 2\n11 3\n55 13\n5801 6\n8919 64\n8765432 1\n","output":"12\n18\n196\n1975581\n958900\n38416403456028\n"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\C++\\Codeforces\\Goodbye 2024\\C.cpp","group":"local","local":true}

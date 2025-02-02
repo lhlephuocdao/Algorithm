@@ -1,0 +1,1 @@
+{"name":"Local: A","url":"d:\\C++\\Codeforces\\Round 981 Div 3\\A.cpp","tests":[{"id":1729781641327,"input":"4\n1\n6\n3\n98","output":"Kosuke\nSakurako\nKosuke\nSakurako"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\C++\\Codeforces\\Round 981 Div 3\\A.cpp","group":"local","local":true}

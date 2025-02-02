@@ -1,0 +1,107 @@
+cmake_minimum_required (VERSION 2.6)
+project (displaymgr)
+
+#build_flag (WITH_TESTS "Build unit test binaries for all enabled components" OFF)
+
+set (CMAKE_CXX_STANDARD 14)
+
+# TraceIF logging support (definition from bb file)
+if(WITH_VLOG)
+    add_definitions(-DWITH_VLOG=${WITH_VLOG})
+endif()
+
+add_definitions(-DDISPLAYMGR_VERSION="${DISPLAYMGR_VERSION}")
+
+message("[Info] DisplayMgr Version: ${DISPLAYMGR_VERSION}")
+
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(WAYLAND_CLIENT wayland-client>=1.9.0 REQUIRED)
+pkg_check_modules(LIBPNG libpng REQUIRED)
+pkg_check_modules(IVI_APPLICATION ivi-application REQUIRED)
+
+include_directories(
+    ${WAYLAND_CLIENT_INCLUDE_DIRS}
+    ${LIBPNG_INCLUDE_DIRS}
+    $ENV{PKG_CONFIG_SYSROOT_DIR}/usr/include/librsi
+    $ENV{PKG_CONFIG_SYSROOT_DIR}/usr/include/librsic
+
+    Base/include
+    Utils/include
+    RSI/include
+    Service/include
+
+    ${KIPC_DIR}
+    ${MAINFRAME_DIR}
+    ${GLOBAL_DIR}
+    ${COMMON_DCM_DIR}
+)
+
+set(SOURCES
+    Base/src/SignalHandler.cpp
+
+    RSI/src/DisplayManagementService.cpp
+    RSI/src/DisplayElement.cpp
+    RSI/src/RSICommunicator.cpp
+    RSI/src/ScreenshotElement.cpp
+    RSI/src/PhysicalDisplayResource.cpp
+    RSI/src/RenderingSurfaceResource.cpp
+    RSI/src/DisplayResource.cpp
+    RSI/src/ScreenshotResource.cpp
+    RSI/src/PhysicalDisplayElement.cpp
+    RSI/src/RenderingSurfaceElement.cpp
+    RSI/src/ServiceConnector.cpp
+    RSI/src/ScreenshotSaver.cpp
+
+    Service/src/Log.cpp
+    Service/src/DisplayMgr.cpp
+    Service/src/Executor.cpp
+    Service/src/SurfacesCache.cpp
+    Service/src/Kipc.cpp
+    Service/src/SceneTemplate.cpp
+    Service/src/CompatiblityLayerImpl.cpp
+    Service/src/ImageSurface.cpp
+    Service/src/EGLhelper.cpp
+    Service/src/main.cpp
+)
+
+set(LIBS
+    m
+    dl
+    pthread
+    ilmCommon
+    ilmControl
+    ilmClient
+    EGL
+    GLESv2
+    wayland-egl
+
+    ${BIN_CSA_NAME}
+    ${GLIB2_LDFLAGS}
+    ${LIBPNG_LIBRARIES}
+    pthread
+    PocoNet
+    PocoUtil
+    PocoJSON
+    PocoFoundation
+    rsi
+    rsic
+    traceif
+    kipc
+    json
+    systemd
+
+    ${WAYLAND_CLIENT_LIBRARIES}
+    ${CMAKE_THREAD_LIBS_INIT}
+    ${DLT_LIBRARY}
+)
+
+include_directories(
+    ${IVI_APPLICATION_INCLUDE_DIRS}
+)
+
+add_executable(${PROJECT_NAME} ${SOURCES})
+add_dependencies(${PROJECT_NAME} ${LIBS})
+target_link_libraries(${PROJECT_NAME} ${LIBS})
+target_link_libraries(${PROJECT_NAME} ${IVI_APPLICATION_LIBRARIES})
+
+install (TARGETS ${PROJECT_NAME} DESTINATION bin)
