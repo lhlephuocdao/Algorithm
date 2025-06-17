@@ -1,0 +1,1 @@
+{"name":"Local: A","url":"d:\\C++\\Algorithm\\Codeforces\\Round 1009 Div 3\\A.cpp","tests":[{"id":1741703819450,"input":"2\n2 2 2 2\n1 2 3 4","output":"Yes\nNo"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\C++\\Algorithm\\Codeforces\\Round 1009 Div 3\\A.cpp","group":"local","local":true}

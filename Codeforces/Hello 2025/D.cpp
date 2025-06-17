@@ -1,44 +1,55 @@
 #include <bits/stdc++.h>
 using namespace std;
+#define fastio ios_base::sync_with_stdio(false);cin.tie(0);cout.tie(0);
 #define int long long
+#define pii pair<int, int>
+#define sc second
+#define fi first
+#define all(x) x.begin(), x.end()
+#define INF LLONG_MAX
 
 struct node {
-    int _min, _max, res;
+    int r, l, res, pre_max, pre_min, suf_max, suf_min;
 
-    static node base() { return {INT_MAX, INT_MIN, -1}; }
+    static node base() { return {-1,-1,-INF,-INF,INF,-INF,INF}; }
 
     static void debug(const node& a) {
-        cout << a._min << " " << a._max << " " << a.res << "\n";
+        cout << a.r << " " << a.l << " " << a.res << " " << a.pre_max << " " << a.pre_min << ' ' << a.suf_max << ' ' << a.suf_min << '\n';
     }
 
     static node merge(const node& a, const node& b) {
         node ans;
-        cout << "a: " ;
-        debug(a);
-        cout << "b: ";
-        debug(b);
-        int _max1 = a._max;
-        int _max2 = b._max;
-        int _min1 = a._min;
-        int _min2 = b._min;
-        ans._min = min(_min1, _min2);
-        ans._max = max(_max1, _max2);
-        ans.res = ans._max - ans._min;
-        cout << "ans: ";
-        debug(ans);
+        
+        int l1 = a.l, r1 = a.r, l2 = b.l, r2 = b.r;
+        int pre_max1 = a.pre_max, pre_min1 = a.pre_min;
+        int suf_max1 = a.suf_max, suf_min1 = a.suf_min;
+
+        int pre_max2 = b.pre_max, pre_min2 = b.pre_min;
+        int suf_max2 = b.suf_max, suf_min2 = b.suf_min;
+
+        ans.l = (l1!=-1 ? l1 : l2);
+        ans.r = (r2!=-1 ? r2 : r1);
+        ans.res = max(a.res, b.res);
+        int tmp = max(pre_max2 - suf_min1 - 1, suf_max1 - pre_min2 - 1);
+        ans.res = max(ans.res, tmp);
+
+        ans.pre_max = max(pre_max1, pre_max2 - (r1-l1) - 1);
+        ans.pre_min = min(pre_min1, (r1-l1) + pre_min2 + 1);
+        ans.suf_max = max(suf_max2, suf_max1 - (r2-l2) - 1);
+        ans.suf_min = min(suf_min2, suf_min1 + (r2-l2) + 1);
+
         return ans;
     }
 };
 
 void build(int id, int l ,int r, node st[], vector<int>& a) {
     if (l == r) {
-        st[id] = {a[r]-r, a[l]-l, 0};
+        st[id] = {r, l, 0, a[l], a[l], a[l], a[l]};
         return;
     }
     int mid = l + r >> 1;
     build(2 * id, l, mid, st, a);
     build(2 * id + 1, mid + 1, r, st, a);
-    cout << "merge " << 2*id << " and " << 2*id + 1 << '\n';
     st[id] = node::merge(st[2 * id], st[2 * id + 1]);
 }
 
@@ -55,12 +66,12 @@ node get(int id, int l, int r, int u, int v, node st[]) {
 void update(int id, int l, int r, int x, int y, node st[])
 {
     if (l > x || r < x) return;
- 
+
     if (l == r) {
-        st[id] = {y-l, y-r, 0};
+        st[id] = {r, l, 0, y, y, y, y};
         return;
     }
- 
+
     int mid = l + r >> 1;
     update(id*2, l, mid, x, y, st);
     update(id*2+1, mid+1, r, x, y, st);
@@ -74,7 +85,6 @@ int32_t main() {
     cout.tie(nullptr);
  
     int t; cin >> t;
-    static int count = 0;
     while (t--)
     {
         int n,q;
@@ -84,11 +94,6 @@ int32_t main() {
         node st[4 * n];
         for (int i = 0; i < 4*n; i++) st[i] = node::base();
         build(1, 1, n, st, a);
-
-        // for (int i = 1; i < 4*n; i++) cout << st[i].res << " ";
-        // cout << '\n';
-
-        count++;
         cout << get(1, 1, n, 1, n, st).res << '\n';
 
         while (q--)
@@ -97,9 +102,6 @@ int32_t main() {
             cin >> p >> x;
             a[p] = x;
             update(1, 1, n, p, x, st);
-            //count++;
-      
-            
             cout << get(1, 1, n, 1, n, st).res << '\n';
         }
     }

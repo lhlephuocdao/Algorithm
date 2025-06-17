@@ -1,0 +1,1 @@
+{"name":"Local: C","url":"d:\\C++\\Algorithm\\Codeforces\\ICPC 11\\C.cpp","tests":[{"id":1744019888856,"input":"5 4 1\n45 99\n94 58\n31 38\n83 26\n94 30\n1 2 72\n3 1 9\n5 1 18\n1 4 80\n94 95 269\n","output":"58"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\C++\\Algorithm\\Codeforces\\ICPC 11\\C.cpp","group":"local","local":true}

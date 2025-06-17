@@ -23,7 +23,7 @@ int main()
     cin.tie(NULL);
     cout.tie(NULL);
  
-    int T;
+    int T = 1;
     cin >> T;
 
     while (T--)
@@ -44,6 +44,7 @@ int main()
             MY[b]++;
         }
 
+        // VX, VY : {node, count}
         vector<pair<int, int>> VX(MX.begin(), MX.end());
         vector<pair<int, int>> VY(MY.begin(), MY.end());
 
@@ -130,7 +131,7 @@ int main()
 
         ll ans2 = ans - _min;
 
-        cout << ans << " " << ans - _min << '\n';
+        cout << ans << " " << ans2 << '\n';
         // cout << x << " " << y << '\n';
     }
 

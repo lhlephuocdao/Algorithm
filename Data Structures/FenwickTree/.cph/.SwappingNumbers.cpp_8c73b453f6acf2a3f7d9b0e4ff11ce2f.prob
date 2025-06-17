@@ -1,0 +1,1 @@
+{"name":"Local: SwappingNumbers","url":"d:\\C++\\Algorithm\\CTDL\\FenwickTree\\SwappingNumbers.cpp","tests":[{"id":1744645048900,"input":"6\n3 6 4 2 1 5","output":"4"},{"id":1744645077472,"input":"5\n1 4 2 3 5","output":"1"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\C++\\Algorithm\\CTDL\\FenwickTree\\SwappingNumbers.cpp","group":"local","local":true}

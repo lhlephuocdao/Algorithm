@@ -17,6 +17,14 @@ const int mod = 998244353;
  * stress test
  */
 
+ void debug(vector<pair<int, int>>& a)
+ {
+     for (auto x : a)
+     {
+        cout << x.first << " " << x.second << '\n';
+     }
+ }
+
 int32_t main()
 {
     fastio;
@@ -41,49 +49,45 @@ int32_t main()
             deg[v].first++;
         }
 
-        sort(deg.begin(), deg.end());
-
-        int v1 = deg.back().second;
-        deg.pop_back();
-        sort(adj[v1].begin(), adj[v1].end());
-
-        vector<bool> sub(n, false);
-        for (auto x : adj[v1]) {
-            sub[x] = true;
-            // cout << "remove " << x << '\n';
-            adj[x].erase(find(adj[x].begin(), adj[x].end(), v1));
-        }
-
-        for (int i = 0; i < n-1; i++) {
-            int v = deg[i].second;
-            if (sub[v]) deg[i].first--;
-        }
-
-        sort(deg.begin(), deg.end());
-
-        int v2 = deg.back().second;
-
-        cout << "v1: " << v1 << " v2: " << v2 << '\n';
-
-        vector<bool> mark(n, false);
-        mark[v1] = true;
-        mark[v2] = true;
-        function<void(int)> dfs = [&](int p) {
-            mark[p] = true;
-            for (auto x : adj[p]) {
-                if (mark[x] == false)
-                    dfs(x);
-            }
-        };
-
+        
         int ans = 0;
-        for (int i = 0; i < n; i++) {
-            if (mark[i] == false) {
-                // cout << "dfs for vertice " << i << '\n';
-                ans++;
-                dfs(i);
+        sort(deg.begin(), deg.end());
+        // debug(deg);
+        
+        int m1 = deg.back().first, v1 = deg.back().second;
+        deg.pop_back();
+
+        // cout << "m1: " << m1 << " v1: " << v1 << '\n';
+
+        int cnt = 1;
+        int idx = deg.size()-1;
+        while (idx >= 0 && deg[idx].first == m1) cnt++, idx--;
+
+        if (cnt <= 2) {
+            ans += m1;
+            sort(adj[v1].begin(), adj[v1].end());
+            vector<bool> sub(n, false);
+            for (auto x : adj[v1]) {
+                sub[x] = true;
+                // cout << "remove " << x << '\n';
+                adj[x].erase(find(adj[x].begin(), adj[x].end(), v1));
             }
+
+            for (int i = 0; i < n-1; i++) {
+                int v = deg[i].second;
+                if (sub[v]) deg[i].first--;
+            }
+
+            sort(deg.begin(), deg.end());
+
+            int m2 = deg.back().first, v2 = deg.back().second;
+            // cout << "m2: " << m2 << " v2: " << v2 << '\n';
+
+            ans += deg.back().first - 1;
+        } else {
+            ans += 2*m1 - 1;
         }
+
         cout << ans << '\n';
     }
     return 0;

@@ -33,8 +33,7 @@ class Sol {
         sd[x] += d;
         if(x == 1) break;
         d += div_s[x];
-        int p = x / div_s[x];
-        x = p;
+        x /= div_s[x];
       }
     }
   }
@@ -44,32 +43,48 @@ public:
   ll solve() {
     build();
 
-    for (int i = 0; i < 30; i++)
-      cout << sd[i] << " ";
-    cout << '\n';
-
-    for (int i = 0; i < 30; i++)
-      cout << nt[i] << " ";
-    cout << '\n';
+    // v[i] -> .... -> u -> ... -> 1
+    // sd[u] : sum of distances from each input v[i] to node u
+    // nt[u] : number of v[i] mà có đường đi từ v[1] -> 1 đi qua node u
  
+    // grand : tổng shortest distance của từng node i đến tất cả n-1 node j còn lại -> duplicate
+    // Do đó, D = grand / 2 (D : the sum of shortest path distances over all pairs of numbers)
     ll grand = 0, maxi = 0;
     FOR(i,0,n) {
       int x = v[i];
-      ll tot = 0;
-      tot = (tot + sd[x]);
+      ll tot = sd[x];
        
+      // tot : tổng shortest distance từ node v[i] đến tất cả các node còn lại
       while(x >= 1) {
         if(x == 1) break;
-        int p = x / div_s[x];
+        int p = x / div_s[x]; // node tiếp theo
+        // cout << "x: " << x << " p: " << p << '\n';
+
+        // v1 : số v[i] mà có đường đi đến node 1 không đi qua x
+        // v2 : distance from node x to node p
+        // v3 : số v[i] mà có đường đi đến node 1 đi qua x
+        // v4 : tổng distance của node tiếp theo sau x
+        // v5 : tổng distance của node x
         ll v1 = n - nt[x], v2 = div_s[x], v3 = nt[x], v4 = sd[p], v5 = sd[x];
+
+        // s1 : tổng đóp góp của cạnh v2 (từ x -> p)
         ll s1 = (v1*v2), s2 = 0;
-        if(nt[x] != nt[p]) {
-          s2 = v4 - (v5 + (v2 * v3));
+
+        // Khi số lượng path đi qua x < số lượng path đi qua p
+        // => Tức là nt[x] paths sẽ giao với (nt[p] - nt[x]) paths tại node p
+        // Do đó, ta cần tính tổng distance từ (nt[p] - nt[x]) paths đó đến node p -> s2
+        // s2 = tổng distance node x - tổng distance node x - distance cạnh x-p * số paths đi qua node x
+        // s2 = v4 - v5 - v2*v3
+        if(nt[x] < nt[p]) {
+          s2 = v4 - v5 - v2*v3;
         }
-        tot = (tot + s1 + s2);
-        cout << "x: " << x << "   " << tot << '\n';
+
+        tot += s1 + s2;
+        // cout << "s1: " << s1 << " s2: " << s2 << '\n';
         x = p;
       }
+
+      // cout << "tot: " << tot << '\n';
        
       maxi = max(maxi, tot);
       grand += tot;

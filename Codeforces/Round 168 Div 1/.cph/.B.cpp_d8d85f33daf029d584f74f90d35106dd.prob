@@ -1,0 +1,1 @@
+{"name":"Local: B","url":"d:\\C++\\Algorithm\\Codeforces\\Round 168 Div 1\\B.cpp","tests":[{"id":1749741788838,"input":"3\n1 2\n1 3\n1 -1 1\n","output":"3"},{"id":1749741807415,"input":"3\n1 2\n1 3\n6 5 -3","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\C++\\Algorithm\\Codeforces\\Round 168 Div 1\\B.cpp","group":"local","local":true}

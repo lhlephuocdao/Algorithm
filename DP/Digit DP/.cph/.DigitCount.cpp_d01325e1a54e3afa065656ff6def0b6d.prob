@@ -1,0 +1,1 @@
+{"name":"Local: DigitCount","url":"d:\\C++\\Algorithm\\DP\\Digit DP\\DigitCount.cpp","tests":[{"id":1738775942993,"input":"3\n3 2\n1 3 6\n3 2\n1 2 3\n3 3\n1 4 6\n","output":"Case 1: 5\nCase 2: 9\nCase 3: 9\n"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\C++\\Algorithm\\DP\\Digit DP\\DigitCount.cpp","group":"local","local":true}

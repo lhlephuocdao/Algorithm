@@ -1,0 +1,1 @@
+{"name":"Local: brute","url":"d:\\C++\\Algorithm\\stress_test\\brute.cpp","tests":[{"id":1744478063428,"input":"4\n1 2\n2 3\n1 4\n2\n1 4 2\n2 4 2","output":"1\n2"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\C++\\Algorithm\\stress_test\\brute.cpp","group":"local","local":true}

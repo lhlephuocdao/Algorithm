@@ -1,7 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 #define fastio ios_base::sync_with_stdio(false);cin.tie(0); cout.tie(0);
+#define int long long
 #define ll long long
+#define pii pair<int, int>
 
 mt19937 rng(chrono::system_clock::now().time_since_epoch().count());
 ll random(ll a, ll b)
@@ -12,9 +14,9 @@ ll random(ll a, ll b)
 
 // !!! change shuffle for BETTER TREE
 void genTree(int n) {
-    bool shuffle = false;
+    bool shuffle = true;
 
-    cout << n << el;
+    cout << n << '\n';
     int type = random(1, 4);  // 1: Random, 2: Start, 3: Line, 4: Binary tree
     vector<pair<int, int>> edges;
     for (int v = 2; v <= n; v++) {
@@ -37,7 +39,7 @@ void genTree(int n) {
     }
     if (!shuffle) {
         for (auto e : edges) {
-            cout << e.first << " " << e.second << el;
+            cout << e.first << " " << e.second << '\n';
         }
         return;
     }
@@ -46,26 +48,46 @@ void genTree(int n) {
     vector<int> perm(n + 1);
     for (int i = 1; i <= n; i++) perm[i] = i;
     random_shuffle(edges.begin(), edges.end());
-
+    
     for (auto e : edges) {
         int u = e.first, v = e.second;
         if (random(0, 1)) {
             swap(u, v);
         }
-        cout << perm[u] << " " << perm[v] << el;
+        // int w = random(1, 100);
+        cout << perm[u] << " " << perm[v] << '\n';
     }
 }
 
-int main()
+void generateRandomTree(int n) {
+    vector<int> parents(n + 1);
+    parents[1] = 0; // Root node has no parent
+    
+    for (int i = 2; i <= n; i++) {
+        parents[i] = rand() % (i - 1) + 1; // Random parent from previous nodes
+    }
+    
+    // random_shuffle(parents.begin()+1, parents.end());
+
+    // Print the tree structure
+    for (int i = 1; i <= n; i++) {
+        cout << parents[i] << " ";
+    }
+    cout << "\n";
+}
+
+
+int32_t main()
 {
     fastio;
 
-    ll x = random(1, 70);
-    ll y = random(1, 70);
-    cout << x << ' ' << y << '\n';
-
-    // for (ll i = 0; i < n; i++)
-    //     cout << random(0, 101) << ' ';
+    int n = random(1, 10);
+    cout << n << '\n';
+    for (int i = 1; i <= n; i++)
+        cout << random(0, n) << ' ';
+    cout << '\n';
+    for (int i = 1; i <= n; i++)
+        cout << random(0, n) << ' ';
 
     return 0;
 }

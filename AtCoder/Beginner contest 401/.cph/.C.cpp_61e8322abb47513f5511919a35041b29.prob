@@ -1,0 +1,1 @@
+{"name":"Local: C","url":"d:\\C++\\Algorithm\\AtCoder\\Beginner contest 401\\C.cpp","tests":[{"id":1744460288030,"input":"4 2\n","output":"5"},{"id":1744460296045,"input":"1000000 500000\n","output":"420890625\n"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"d:\\C++\\Algorithm\\AtCoder\\Beginner contest 401\\C.cpp","group":"local","local":true}
